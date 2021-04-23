@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        #record_score{
+            position: absolute;
+            left: 30px;
+            z-index: 3;
+            width: 100px;
+            height: 20px;
+            top: 10px;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            color: blue;
+            font-size: 30px;
+        }
+        button
+        {
+            position: absolute;
+            margin:0 auto;
+            width: 100px;
+            height:50px;
+            left: 50%;
+            top:50%;
+            border-radius: 20px;
+            background-color: rgb(38, 141, 141);
+            color: white;
+            font-size: 25px;
+        }
+    </style>
+</head>    
+<body style="margin: 0px;">
+<canvas id="myCanvas"
+style="border:1px solid #c3c3c3; width: 100%; z-index: 2;">
+Your browser does not support the canvas element.
+</canvas>
+<script>
+    function start()
+    {
+        document.querySelector("button").style.visibility="hidden";
+var canvas = document.getElementById("myCanvas");
+canvas.width=innerWidth;
+canvas.height=innerHeight;
+var ctx = canvas.getContext("2d");
+var y=0;
+var x=Math.floor(Math.random()*innerWidth-70);
+var sub=500;
+var rect_x=0;
+var rect_y=innerHeight-60;
+
+var parent=document.querySelector("body");
+var app=document.createElement("div");
+app.setAttribute("id","record_score");
+var score=0;
+app.innerHTML="Score:"+score;
+parent.append(app);
+function animate()
+{
+    ctx.clearRect(0,0,innerWidth,innerHeight);
+    requestAnimationFrame(animate);
+    ctx.fillStyle="red";
+    ctx.fillRect(rect_x,rect_y,100,60);
+    ctx.fillStyle="black";
+    ctx.fillRect(x,y,70,100);
+        if(y+100>=innerHeight)
+        {
+         var end=confirm("your score is "+score);
+         if(end==true)
+         {
+            window.location.reload(); 
+            y=0;
+        
+         }
+        }
+        y+=3;  
+        if (score>10) 
+        {
+            y+=4;
+        } 
+        else if(score>20)
+        {
+            y+=5;
+        }
+        else if(score>30)
+        {
+            y+=8;
+        }
+        else if(score>40)
+        {
+            y+=9;
+        }
+        else if(score>50)
+        {
+            y+=10;
+        }else if(score>700)
+        {
+            y+=12;
+        }
+        if(x+70>=rect_x&&y+100>=rect_y&&rect_y+50>y&&x<rect_x+100)
+        {
+            x=Math.random()*innerWidth;
+            y=0;
+            score+=1;
+            app.innerHTML="Score:"+score; 
+            parent.append(app);
+           
+        }
+
+}
+function move(e)
+        {   
+            if(e.keyCode==39)
+            {
+                ctx.fillRect(rect_x,rect_y,100,60);
+                rect_x+=20;
+                if(rect_x+100>=innerWidth)
+                {
+                    rect_x=0;
+                }
+                console.log(score);
+            }
+            if(e.keyCode==37)
+            {
+                ctx.fillRect(rect_x,rect_y,100,60);
+                rect_x-=20;
+                if(rect_x<0)
+                {
+                    rect_x=innerWidth;
+                }
+            }
+            
+        }      
+animate();
+document.addEventListener("keydown",move);
+
+    }
+
+</script>
+</body>
+<button onclick="start()">Start</button>
+</html>
